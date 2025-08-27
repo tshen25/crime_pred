@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>crime</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="crime_files/libs/clipboard/clipboard.min.js"></script>
+<script src="crime_files/libs/quarto-html/quarto.js"></script>
+<script src="crime_files/libs/quarto-html/popper.min.js"></script>
+<script src="crime_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="crime_files/libs/quarto-html/anchor.min.js"></script>
+<link href="crime_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="crime_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="crime_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="crime_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="crime_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="crime-prediction-project" class="level1">
+<h1>Crime Prediction Project</h1>
+<p><em>This project applies linear regression techniques to predict crime rates in U.S. cities using socioeconomic and demographic data. Starting with a full model including all predictors, I observed issues of overfitting and unrealistic predictions. By narrowing the model to only statistically significant predictors and later applying recursive feature elimination with cross-validation, I identified a set of ten key predictors that produced a more accurate and realistic crime rate prediction. The final model balanced interpretability and predictive performance, achieving an R² of ~0.66 and generating a crime rate prediction consistent with the observed data range.</em></p>
+<p>Using crime data from http://www.statsci.org/data/general/uscrime.txt, use regression (a useful<br>
+R function is lm or glm) to predict the observed crime rate in a city with the following data:<br>
+M = 14.0, So = 0, Ed = 10.0, Po1 = 12.0, Po2 = 15.5, LF = 0.640, M.F = 94.0, Pop = 150, NW<br>
+= 1.1, U1 = 0.120, U2 = 3.6, Wealth = 3200, Ineq = 20.1, Prob = 0.04, Time = 39.0<br>
+Show your model (factors used and their coefficients), the software output, and the quality of fit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load required dependcies</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(tinytex, tidyverse, caret, ggplot2, datasets)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the data point as test</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">M =</span> <span class="fl">14.0</span>, <span class="at">So =</span> <span class="dv">0</span>, <span class="at">Ed =</span> <span class="fl">10.0</span>, <span class="at">Po1 =</span> <span class="fl">12.0</span>, <span class="at">Po2 =</span> <span class="fl">15.5</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">LF =</span> <span class="fl">0.640</span>, <span class="at">M.F =</span> <span class="fl">94.0</span>, <span class="at">Pop =</span> <span class="dv">150</span>, <span class="at">NW =</span> <span class="fl">1.1</span>, <span class="at">U1 =</span> <span class="fl">0.120</span>, <span class="at">U2 =</span> <span class="fl">3.6</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Wealth =</span> <span class="dv">3200</span>, <span class="at">Ineq =</span> <span class="fl">20.1</span>, <span class="at">Prob =</span> <span class="fl">0.04</span>, <span class="at">Time =</span> <span class="fl">39.0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Load US Crime Data </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="st">"~/Desktop/Personal Projects/crimePred/uscrime.txt"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>crime <span class="ot">&lt;-</span> <span class="fu">read.table</span>(file_path, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(crime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     M So   Ed  Po1  Po2    LF   M.F Pop   NW    U1  U2 Wealth Ineq     Prob
+1 15.1  1  9.1  5.8  5.6 0.510  95.0  33 30.1 0.108 4.1   3940 26.1 0.084602
+2 14.3  0 11.3 10.3  9.5 0.583 101.2  13 10.2 0.096 3.6   5570 19.4 0.029599
+3 14.2  1  8.9  4.5  4.4 0.533  96.9  18 21.9 0.094 3.3   3180 25.0 0.083401
+4 13.6  0 12.1 14.9 14.1 0.577  99.4 157  8.0 0.102 3.9   6730 16.7 0.015801
+5 14.1  0 12.1 10.9 10.1 0.591  98.5  18  3.0 0.091 2.0   5780 17.4 0.041399
+6 12.1  0 11.0 11.8 11.5 0.547  96.4  25  4.4 0.084 2.9   6890 12.6 0.034201
+     Time Crime
+1 26.2011   791
+2 25.2999  1635
+3 24.3006   578
+4 29.9012  1969
+5 21.2998  1234
+6 20.9995   682</code></pre>
+</div>
+</div>
+<p>Objective: We will need to find the significant predictor variables that can impact the outcome<br>
+of our model in predicting the crime rate of the provided test data point. Our hypothesis are:<br>
+• Ho : the selected variable does not impact the outcome which is the crime rate<br>
+• Ha : the selected variable does have some impacts on predicting the outcome<br>
+Methods: First, we will create a naive simple Linear regression model lm() with all the available<br>
+predictors and observe the result. Then we will apply the recursive feature elimination rfe()<br>
+as a cross -validation method to reduce the less important predictors to produce an optimal<br>
+model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create a naive model and print result</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>naive_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Crime<span class="sc">~</span>., <span class="at">data=</span>crime)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(naive_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Crime ~ ., data = crime)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-395.74  -98.09   -6.69  112.99  512.67 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -5.984e+03  1.628e+03  -3.675 0.000893 ***
+M            8.783e+01  4.171e+01   2.106 0.043443 *  
+So          -3.803e+00  1.488e+02  -0.026 0.979765    
+Ed           1.883e+02  6.209e+01   3.033 0.004861 ** 
+Po1          1.928e+02  1.061e+02   1.817 0.078892 .  
+Po2         -1.094e+02  1.175e+02  -0.931 0.358830    
+LF          -6.638e+02  1.470e+03  -0.452 0.654654    
+M.F          1.741e+01  2.035e+01   0.855 0.398995    
+Pop         -7.330e-01  1.290e+00  -0.568 0.573845    
+NW           4.204e+00  6.481e+00   0.649 0.521279    
+U1          -5.827e+03  4.210e+03  -1.384 0.176238    
+U2           1.678e+02  8.234e+01   2.038 0.050161 .  
+Wealth       9.617e-02  1.037e-01   0.928 0.360754    
+Ineq         7.067e+01  2.272e+01   3.111 0.003983 ** 
+Prob        -4.855e+03  2.272e+03  -2.137 0.040627 *  
+Time        -3.479e+00  7.165e+00  -0.486 0.630708    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 209.1 on 31 degrees of freedom
+Multiple R-squared:  0.8031,    Adjusted R-squared:  0.7078 
+F-statistic: 8.429 on 15 and 31 DF,  p-value: 3.539e-07</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(naive_model, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+155.4349 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(crime<span class="sc">$</span>Crime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  342 1993</code></pre>
+</div>
+</div>
+<p>First Observation: We can see that the predicted crime rate (155.4) is clearly out of the Crime<br>
+rate range (342 - 1993), one of the possibility is that the naive model has been overfitting with<br>
+all the predictors.<br>
+Taking a closer look at the column Pr of the Coefficients table and comparing the values to<br>
+the Significant codes, we conclude that all the predictors that has the p values of 0.05 and<br>
+above should be excluded from our final model since they are not significantly impacted the<br>
+outcome. Keep in mind that a predictor must have a value that is lower than alpha (0.05) in<br>
+order for us to reject the null hypothesis.<br>
+With all these insignificant predictor excluded, we are now end up with 4 strong predictors, in-<br>
+cluding M (0.043), Ed (0.0048), Ineq (0.0039), Prob (0.040), so we are ready to build hopefully<br>
+a better model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>better_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Crime <span class="sc">~</span> M <span class="sc">+</span> Ed <span class="sc">+</span> Ineq <span class="sc">+</span> Prob, <span class="at">data =</span> crime, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(better_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Crime ~ M + Ed + Ineq + Prob, data = crime, x = TRUE, 
+    y = TRUE)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-532.97 -254.03  -55.72  137.80  960.21 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept) -1339.35    1247.01  -1.074  0.28893   
+M              35.97      53.39   0.674  0.50417   
+Ed            148.61      71.92   2.066  0.04499 * 
+Ineq           26.87      22.77   1.180  0.24458   
+Prob        -7331.92    2560.27  -2.864  0.00651 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 347.5 on 42 degrees of freedom
+Multiple R-squared:  0.2629,    Adjusted R-squared:  0.1927 
+F-statistic: 3.745 on 4 and 42 DF,  p-value: 0.01077</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#predict the outcome with test data point</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(better_model, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+897.2307 </code></pre>
+</div>
+</div>
+<p>Second observation: We can tell that there is an improvement this time with the predicted<br>
+crime rate of 897.2307, and the Adjusted R-squared value drop from 0.7078 (naive model) to<br>
+0.1927. However, we don’t think we have built the best model yet, since the other excluded<br>
+predictor might still have a positive effect when being combined with the included predictors.<br>
+For this, we want to go extra miles, and apply the recursive feature elimination rfe() to train<br>
+out model and identify the best predictors using cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># set parameters for rfe() methods</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">rfeControl</span>(<span class="at">functions =</span> lmFuncs,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">method =</span> <span class="st">"repeatedcv"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">number=</span><span class="dv">10</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="at">repeats =</span> <span class="dv">25</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#run the rfe() methods</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>rfe_lm <span class="ot">&lt;-</span> <span class="fu">rfe</span>(crime[,<span class="sc">-</span><span class="dv">16</span>], crime[[<span class="dv">16</span>]],</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="at">sizes =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>),</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="at">rfeControl =</span> params)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>rfe_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Recursive feature selection
+
+Outer resampling method: Cross-Validated (10 fold, repeated 25 times) 
+
+Resampling performance over subset size:
+
+ Variables  RMSE Rsquared   MAE RMSESD RsquaredSD  MAESD Selected
+         1 360.8   0.3296 291.5 133.31     0.2986 100.85         
+         2 345.8   0.3610 277.7 134.61     0.2975 110.02         
+         3 352.0   0.3339 285.5 132.77     0.2993 109.49         
+         4 333.4   0.4115 277.6  99.41     0.3142  87.97         
+         5 316.4   0.4805 260.8  96.84     0.3183  86.07         
+         6 306.9   0.4952 253.8  96.65     0.3224  88.09         
+         7 308.9   0.5038 256.0  93.59     0.3101  84.88         
+         8 270.1   0.5720 224.2  85.00     0.3001  74.44         
+         9 235.8   0.6502 190.8  94.79     0.2851  78.07         
+        10 230.9   0.6636 186.9  85.05     0.2645  68.75        *
+        11 236.8   0.6374 191.7  90.27     0.2725  70.84         
+        12 249.0   0.6112 199.9  90.39     0.2848  72.46         
+        13 252.8   0.6063 203.9  92.74     0.2881  75.30         
+        14 261.2   0.5911 210.2  97.12     0.2918  80.58         
+        15 265.2   0.5841 215.0  94.74     0.2874  81.74         
+
+The top 5 variables (out of 10):
+   U1, Prob, LF, Po1, Ed</code></pre>
+</div>
+</div>
+<p>Third observation: by comparing the lower RMSE and the higher R-squared value, we can<br>
+tell that our best fiited model can be built with 10 strongest predictors (10 variables, RMSE:<br>
+230.9, Rsquared:0.6636). Now let list our 10 best predictors and predict the outcome with our<br>
+best fitted model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#list the top ten predictors</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predictors</span>(rfe_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "U1"   "Prob" "LF"   "Po1"  "Ed"   "U2"   "Po2"  "M"    "Ineq" "So"  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>best_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Crime <span class="sc">~</span> U1 <span class="sc">+</span> Prob <span class="sc">+</span> LF <span class="sc">+</span> Po1 <span class="sc">+</span> Ed <span class="sc">+</span> U2 <span class="sc">+</span> Po2 <span class="sc">+</span> M <span class="sc">+</span> Ineq <span class="sc">+</span> So, <span class="at">data =</span> crime, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(best_model, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+870.6834 </code></pre>
+</div>
+</div>
+<p>Conclusion: by running cross-validation (repeatedcv) combining with the recursive feature<br>
+elimination (rfe), we are able to find the ten possible predictors to build our best model with<br>
+an acceptable predicted crime value of 870.6834. Our final best model is lm(Crime ~ U1 + Prob<br>
++ LF + Po1 + Ed + U2 + Po2 + M + Ineq + So, data = crime, x = TRUE, y = TRUE)<br>
+5</p>
+<p><br>
+</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
