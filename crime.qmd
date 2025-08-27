@@ -1,0 +1,118 @@
+# Crime Prediction Project
+
+Placeholder text here
+
+Using crime data from http://www.statsci.org/data/general/uscrime.txt, use regression (a useful\
+R function is lm or glm) to predict the observed crime rate in a city with the following data:\
+M = 14.0, So = 0, Ed = 10.0, Po1 = 12.0, Po2 = 15.5, LF = 0.640, M.F = 94.0, Pop = 150, NW\
+= 1.1, U1 = 0.120, U2 = 3.6, Wealth = 3200, Ineq = 20.1, Prob = 0.04, Time = 39.0\
+Show your model (factors used and their coefficients), the software output, and the quality of fit.
+
+```{r}
+# Load required dependcies
+library(pacman)
+p_load(tinytex, tidyverse, caret, ggplot2, datasets)
+```
+
+```{r}
+# Store the data point as test
+test <- data.frame(
+  M = 14.0, So = 0, Ed = 10.0, Po1 = 12.0, Po2 = 15.5, 
+  LF = 0.640, M.F = 94.0, Pop = 150, NW = 1.1, U1 = 0.120, U2 = 3.6, 
+  Wealth = 3200, Ineq = 20.1, Prob = 0.04, Time = 39.0
+  )
+    
+#Load US Crime Data               
+crime <- read.table(file_path, stringsAsFactors = FALSE, header=TRUE)
+head(crime)
+```
+
+Objective: We will need to find the significant predictor variables that can impact the outcome\
+of our model in predicting the crime rate of the provided test data point. Our hypothesis are:\
+• Ho : the selected variable does not impact the outcome which is the crime rate\
+• Ha : the selected variable does have some impacts on predicting the outcome\
+Methods: First, we will create a naive simple Linear regression model lm() with all the available\
+predictors and observe the result. Then we will apply the recursive feature elimination rfe()\
+as a cross -validation method to reduce the less important predictors to produce an optimal\
+model.
+
+```{r}
+set.seed(1)
+# create a naive model and print result
+naive_model <- lm(Crime~., data=crime)
+summary(naive_model)
+```
+
+```{r}
+predict(naive_model, test)
+range(crime$Crime)
+```
+
+First Observation: We can see that the predicted crime rate (155.4) is clearly out of the Crime\
+rate range (342 - 1993), one of the possibility is that the naive model has been overfitting with\
+all the predictors.\
+Taking a closer look at the column Pr of the Coefficients table and comparing the values to\
+the Significant codes, we conclude that all the predictors that has the p values of 0.05 and\
+above should be excluded from our final model since they are not significantly impacted the\
+outcome. Keep in mind that a predictor must have a value that is lower than alpha (0.05) in\
+order for us to reject the null hypothesis.\
+With all these insignificant predictor excluded, we are now end up with 4 strong predictors, in-\
+cluding M (0.043), Ed (0.0048), Ineq (0.0039), Prob (0.040), so we are ready to build hopefully\
+a better model.
+
+```{r}
+set.seed(1)
+better_model <- lm(Crime ~ M + Ed + Ineq + Prob, data = crime, x = TRUE, y = TRUE)
+summary(better_model)
+```
+
+```{r}
+#predict the outcome with test data point
+predict(better_model, test)
+```
+
+Second observation: We can tell that there is an improvement this time with the predicted\
+crime rate of 897.2307, and the Adjusted R-squared value drop from 0.7078 (naive model) to\
+0.1927. However, we don\'t think we have built the best model yet, since the other excluded\
+predictor might still have a positive effect when being combined with the included predictors.\
+For this, we want to go extra miles, and apply the recursive feature elimination rfe() to train\
+out model and identify the best predictors using cross-validation.
+
+```{r}
+set.seed(1)
+# set parameters for rfe() methods
+params <- rfeControl(functions = lmFuncs,
+method = "repeatedcv",
+number=10,
+repeats = 25,
+verbose = FALSE)
+#run the rfe() methods
+rfe_lm <- rfe(crime[,-16], crime[[16]],
+sizes = c(1:15),
+rfeControl = params)
+rfe_lm
+```
+
+Third observation: by comparing the lower RMSE and the higher R-squared value, we can\
+tell that our best fiited model can be built with 10 strongest predictors (10 variables, RMSE:\
+230.9, Rsquared:0.6636). Now let list our 10 best predictors and predict the outcome with our\
+best fitted model.
+
+```{r}
+#list the top ten predictors
+set.seed(1)
+predictors(rfe_lm)
+```
+
+```{r}
+best_model <- lm(Crime ~ U1 + Prob + LF + Po1 + Ed + U2 + Po2 + M + Ineq + So, data = crime, x = TRUE, y = TRUE)
+predict(best_model, test)
+```
+
+Conclusion: by running cross-validation (repeatedcv) combining with the recursive feature\
+elimination (rfe), we are able to find the ten possible predictors to build our best model with\
+an acceptable predicted crime value of 870.6834. Our final best model is lm(Crime \~ U1 + Prob\
++ LF + Po1 + Ed + U2 + Po2 + M + Ineq + So, data = crime, x = TRUE, y = TRUE)\
+5
+
+\
